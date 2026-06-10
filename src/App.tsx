@@ -13,6 +13,7 @@ import {
   MessageSquare,
   MonitorSmartphone,
   Network,
+  Rocket,
   ShieldCheck,
   Sparkles,
   TestTube2,
@@ -26,9 +27,13 @@ import './App.css'
 const navItems = [
   { label: 'Work', href: '/work' },
   { label: 'Services', href: '/services' },
+  { label: 'Team', href: '/team' },
   { label: 'Process', href: '/process' },
   { label: 'Contact', href: '/contact' },
 ]
+
+const projectMailto =
+  'mailto:info@atrax.al?subject=Project%20inquiry%20for%20AtraX&body=Hi%20AtraX%2C%0A%0AI%20want%20to%20start%20a%20project.%20The%20product%20I%20am%20building%20is%3A%0A%0AI%20need%20help%20with%3A%0A%0ATimeline%20or%20launch%20goal%3A%0A'
 
 const proof = [
   { value: '98%', label: 'client satisfaction' },
@@ -231,12 +236,49 @@ const clientSignals = [
   'Dedicated pods',
 ]
 
+const teamRoles = [
+  {
+    title: 'Product leads',
+    text: 'Shape scope, milestones, stakeholder rhythm, and the shortest path to a useful release.',
+    label: '01',
+  },
+  {
+    title: 'UX and UI designers',
+    text: 'Turn workflows into screens that can be reviewed, tested, and handed to engineering without drift.',
+    label: '02',
+  },
+  {
+    title: 'Full-stack engineers',
+    text: 'Build web, mobile, API, cloud, and data layers with launch pressure in mind from day one.',
+    label: '03',
+  },
+  {
+    title: 'QA and release',
+    text: 'Automate checks, harden environments, and keep release risk visible before production.',
+    label: '04',
+  },
+]
+
+const teamStats = [
+  { value: '40+', label: 'software professionals' },
+  { value: '4', label: 'delivery disciplines' },
+  { value: '2', label: 'Tirana + US collaboration' },
+]
+
+const serviceMotion = [
+  { title: 'Discover', text: 'Scope, risk, architecture, and release path become visible.' },
+  { title: 'Prototype', text: 'Core screens and states move before engineering spend expands.' },
+  { title: 'Engineer', text: 'Frontend, backend, cloud, QA, and data move in one rail.' },
+  { title: 'Launch', text: 'Preview, observe, harden, and ship with a clean handoff.' },
+]
+
 const generatedVisuals = {
   globalHero: '/generated/atrax-global-hero.png',
   productEngineering: '/generated/atrax-product-engineering.png',
   borderNetwork: '/generated/atrax-border-network.png',
   securitySystem: '/generated/atrax-security-system.png',
   aiOperations: '/generated/atrax-ai-operations.png',
+  teamSystem: '/generated/atrax-team-system.png',
 }
 
 const globalHubs = [
@@ -262,10 +304,10 @@ function Header() {
           </NavLink>
         ))}
       </nav>
-      <NavLink to="/contact" className="header-cta">
+      <a href={projectMailto} className="header-cta">
         Start a project
         <ArrowRight size={16} strokeWidth={2.4} />
-      </NavLink>
+      </a>
     </header>
   )
 }
@@ -277,10 +319,10 @@ function Footer() {
         <p className="mono">ATRAX / SOFTWARE COMPANY</p>
         <h2>Plan the next product with a team that ships.</h2>
       </div>
-      <NavLink to="/contact" className="button button-dark">
+      <a href={projectMailto} className="button button-dark">
         Start a project
         <ArrowRight size={18} />
-      </NavLink>
+      </a>
     </footer>
   )
 }
@@ -296,6 +338,7 @@ function Layout() {
           <Route path="/" element={<HomePage />} />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/team" element={<TeamPage />} />
           <Route path="/process" element={<ProcessPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
@@ -313,10 +356,10 @@ function HomePage() {
           <h1>Borderless software systems in motion.</h1>
           <p>AtraX builds web, mobile, AI, and cloud products from Tirana to global launch.</p>
           <div className="hero-actions">
-            <NavLink to="/contact" className="button button-dark">
+            <a href={projectMailto} className="button button-dark">
               Start a project
               <ArrowRight size={18} />
-            </NavLink>
+            </a>
             <NavLink to="/work" className="text-link">
               See work
               <ChevronRight size={18} />
@@ -397,6 +440,7 @@ function ServicesPage() {
         text="Strategy, product design, engineering, QA, cloud, and dedicated teams in one delivery loop."
         visual={<ServiceOrbit />}
       />
+      <ServiceMotionLab />
       <section className="section service-grid">
         {services.map((service) => (
           <ServiceCard key={service.title} service={service} />
@@ -416,6 +460,62 @@ function ServicesPage() {
               <span />
             </div>
           ))}
+        </div>
+      </section>
+    </>
+  )
+}
+
+function TeamPage() {
+  return (
+    <>
+      <PageHero
+        label="Team"
+        title="A senior product pod, not a handoff chain."
+        text="AtraX combines strategy, UX, engineering, QA, cloud, and delivery leadership around one accountable product rhythm."
+        visual={<TeamConstellation />}
+      />
+      <section className="section team-proof">
+        {teamStats.map((item) => (
+          <article key={item.label}>
+            <strong>{item.value}</strong>
+            <span>{item.label}</span>
+          </article>
+        ))}
+      </section>
+      <section className="section team-system">
+        <div>
+          <p className="mono section-index">TEAM OPERATING SYSTEM</p>
+          <h2>Small enough to stay sharp, complete enough to ship.</h2>
+        </div>
+        <div className="team-role-grid">
+          {teamRoles.map((role) => (
+            <article key={role.title} className="team-role-card">
+              <span className="mono">{role.label}</span>
+              <h3>{role.title}</h3>
+              <p>{role.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="section team-cinema">
+        <div className="team-cinema-copy">
+          <p className="mono section-index">HOW IT FEELS</p>
+          <h2>One room for product, design, code, QA, and launch decisions.</h2>
+          <a href={projectMailto} className="button button-dark">
+            Start a project
+            <ArrowRight size={18} />
+          </a>
+        </div>
+        <div className="team-cinema-stage" aria-label="Animated team delivery system">
+          <img src={generatedVisuals.teamSystem} alt="" aria-hidden="true" />
+          <img src={generatedVisuals.productEngineering} alt="" aria-hidden="true" />
+          <div className="team-beam beam-one" />
+          <div className="team-beam beam-two" />
+          <span className="team-node node-product">Product</span>
+          <span className="team-node node-design">Design</span>
+          <span className="team-node node-code">Code</span>
+          <span className="team-node node-qa">QA</span>
         </div>
       </section>
     </>
@@ -501,10 +601,10 @@ function ContactPage() {
             <strong>What should be true after launch?</strong>
             <p>Revenue, adoption, operational speed, reliability, or scale.</p>
           </div>
-          <button type="button" className="button button-dark intake-button">
-            Plan the project
+          <a href={projectMailto} className="button button-dark intake-button">
+            Start a project
             <ArrowRight size={18} />
-          </button>
+          </a>
         </div>
       </section>
     </>
@@ -1012,6 +1112,42 @@ function ServiceCard({ service }: { service: (typeof services)[number] }) {
   )
 }
 
+function ServiceMotionLab() {
+  return (
+    <section className="section service-motion">
+      <div className="service-motion-copy">
+        <p className="mono section-index">SERVICE ENGINE</p>
+        <h2>Services in motion.</h2>
+        <p>
+          Services should not feel separate. Strategy, UX, code, QA, cloud, and launch
+          move through one visible delivery system.
+        </p>
+      </div>
+      <div className="service-motion-stage" aria-label="Animated service delivery rail">
+        <img src={generatedVisuals.productEngineering} alt="" aria-hidden="true" />
+        <div className="service-radar">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="service-lanes">
+          {serviceMotion.map((item, index) => (
+            <article key={item.title} style={{ '--delay': `${index * 0.24}s` } as CSSProperties}>
+              <span className="mono">{String(index + 1).padStart(2, '0')}</span>
+              <strong>{item.title}</strong>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+        <a href={projectMailto} className="button button-dark service-motion-cta">
+          Start a project
+          <Rocket size={18} />
+        </a>
+      </div>
+    </section>
+  )
+}
+
 function WorkGridVisual() {
   return (
     <div className="work-grid-visual">
@@ -1021,6 +1157,25 @@ function WorkGridVisual() {
           <span>{item.title}</span>
         </div>
       ))}
+    </div>
+  )
+}
+
+function TeamConstellation() {
+  return (
+    <div className="team-constellation" aria-label="AtraX team delivery constellation">
+      <img src={generatedVisuals.teamSystem} alt="" aria-hidden="true" />
+      <div className="constellation-ring" />
+      <span className="constellation-node c1">Product</span>
+      <span className="constellation-node c2">UX</span>
+      <span className="constellation-node c3">Engineering</span>
+      <span className="constellation-node c4">QA</span>
+      <span className="constellation-node c5">Cloud</span>
+      <div className="constellation-panel">
+        <UsersRound size={22} />
+        <strong>Senior delivery pod</strong>
+        <span>One team, one release rhythm.</span>
+      </div>
     </div>
   )
 }
