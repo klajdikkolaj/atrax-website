@@ -814,8 +814,7 @@ main {
 }
 
 .build-film {
-  width: min(100vw, 1440px);
-  margin: 0 auto;
+  width: 100%;
   padding: clamp(78px, 10vw, 130px) max(42px, calc((100vw - 1180px) / 2));
   display: grid;
   grid-template-columns: 0.78fr 1.22fr;
