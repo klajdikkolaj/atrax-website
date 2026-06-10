@@ -2,9 +2,7 @@ import {
   ArrowRight,
   BadgeCheck,
   BrainCircuit,
-  CheckCircle2,
   ChevronRight,
-  CircleDot,
   CloudCog,
   Code2,
   Component,
@@ -21,7 +19,7 @@ import {
   UsersRound,
   type LucideIcon,
 } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
@@ -173,35 +171,35 @@ const testimonials = [
     quote:
       'They delivered above and beyond in UX concepts, UI designs, frontend implementation, and backend data structure.',
     name: 'John Sherwin',
-    role: 'Microsoft Corporation',
+    role: 'Enterprise product stakeholder',
     metric: 'UX + backend',
   },
   {
     quote:
       'Their ability to produce quality code, communicate, and actually understand the project scope is incredible.',
     name: 'Kyle Wyatt',
-    role: 'PODKI Inc.',
+    role: 'Product founder',
     metric: 'Quality code',
   },
   {
     quote:
       'They completed work early and made several improvements on our initial proposal.',
     name: 'Mike Spaulding',
-    role: 'Microsoft / Affirma Consulting',
+    role: 'Consulting delivery lead',
     metric: 'Early delivery',
   },
   {
     quote:
       'True professionals. Clear objectives, clear time frames, and nimble solutions when the project needed them.',
     name: 'Justin Doff',
-    role: 'Markenometry Inc.',
+    role: 'Growth systems founder',
     metric: 'Clear scope',
   },
   {
     quote:
       'They went above and beyond to develop new solutions and make sure our systems were working correctly.',
     name: 'Reis Hill',
-    role: 'Magic Candy Factory Ltd',
+    role: 'Operations platform owner',
     metric: 'Systems checked',
   },
 ]
@@ -224,7 +222,31 @@ const systemTiles = [
   },
 ]
 
-const clientSignals = ['Microsoft', 'PODKI', 'Markenometry', 'Toyota', 'CDLAN', 'Dextrio']
+const clientSignals = [
+  'AI workflows',
+  'Cloud platforms',
+  'Mobile products',
+  'QA automation',
+  'Security systems',
+  'Dedicated pods',
+]
+
+const generatedVisuals = {
+  globalHero: '/generated/atrax-global-hero.png',
+  productEngineering: '/generated/atrax-product-engineering.png',
+  borderNetwork: '/generated/atrax-border-network.png',
+  securitySystem: '/generated/atrax-security-system.png',
+  aiOperations: '/generated/atrax-ai-operations.png',
+}
+
+const globalHubs = [
+  { city: 'Tirana', region: 'Delivery core', x: 52, y: 48 },
+  { city: 'New York', region: 'US partners', x: 22, y: 43 },
+  { city: 'London', region: 'Product teams', x: 46, y: 34 },
+  { city: 'Milan', region: 'EU systems', x: 50, y: 42 },
+  { city: 'Dubai', region: 'Growth markets', x: 62, y: 54 },
+  { city: 'Singapore', region: 'Cloud operations', x: 78, y: 67 },
+]
 
 function Header() {
   return (
@@ -288,10 +310,8 @@ function HomePage() {
     <>
       <section className="hero page-grid">
         <div className="hero-copy">
-          <h1>Software teams for products that need to ship cleanly.</h1>
-          <p>
-            AtraX turns product ideas into shipped web, mobile, and cloud systems.
-          </p>
+          <h1>Borderless software systems in motion.</h1>
+          <p>AtraX builds web, mobile, AI, and cloud products from Tirana to global launch.</p>
           <div className="hero-actions">
             <NavLink to="/contact" className="button button-dark">
               Start a project
@@ -303,25 +323,22 @@ function HomePage() {
             </NavLink>
           </div>
         </div>
-        <ProjectConsole />
+        <HeroNetwork />
       </section>
 
       <ProofStrip />
       <ClientMarquee />
 
+      <GlobalReach />
       <MotionSystem />
 
       <section className="section">
         <SectionHeading
           index="02 / WORK"
-          title="Selected work, shown as systems in motion."
-          text="Real portfolio anchors, reframed as moving product systems."
+          title="Generated worlds around real delivery systems."
+          text="Large motion-ready visuals for global, engineering, security, and AI work."
         />
-        <div className="case-rail">
-          {caseStudies.slice(0, 3).map((item) => (
-            <CaseRow key={item.title} item={item} />
-          ))}
-        </div>
+        <ProjectCinema />
       </section>
 
       <BuildFilm />
@@ -535,6 +552,215 @@ function SectionHeading({
   )
 }
 
+function pointFromLatLon(three: typeof import('three'), lat: number, lon: number, radius: number) {
+  const phi = (90 - lat) * (Math.PI / 180)
+  const theta = (lon + 180) * (Math.PI / 180)
+
+  return new three.Vector3(
+    -radius * Math.sin(phi) * Math.cos(theta),
+    radius * Math.cos(phi),
+    radius * Math.sin(phi) * Math.sin(theta),
+  )
+}
+
+function GlobalNetworkCanvas() {
+  const mountRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    let disposed = false
+    let cleanup: (() => void) | undefined
+    let animationFrame = 0
+
+    void import('three').then((three) => {
+      if (disposed) return
+
+      const mount = mountRef.current
+      if (!mount) return
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const scene = new three.Scene()
+      const camera = new three.PerspectiveCamera(38, 1, 0.1, 100)
+      const renderer = new three.WebGLRenderer({ alpha: true, antialias: true })
+      const group = new three.Group()
+      const pointer = { x: 0, y: 0 }
+
+      camera.position.set(0, 0, 5.6)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      renderer.setClearColor(0xffffff, 0)
+      mount.appendChild(renderer.domElement)
+      scene.add(group)
+
+      const dotCount = 560
+      const positions = new Float32Array(dotCount * 3)
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5))
+
+      for (let index = 0; index < dotCount; index += 1) {
+        const y = 1 - (index / (dotCount - 1)) * 2
+        const radiusAtY = Math.sqrt(1 - y * y)
+        const theta = goldenAngle * index
+
+        positions[index * 3] = Math.cos(theta) * radiusAtY * 1.76
+        positions[index * 3 + 1] = y * 1.76
+        positions[index * 3 + 2] = Math.sin(theta) * radiusAtY * 1.76
+      }
+
+      const pointGeometry = new three.BufferGeometry()
+      pointGeometry.setAttribute('position', new three.BufferAttribute(positions, 3))
+      const pointMaterial = new three.PointsMaterial({
+        color: 0x111315,
+        size: 0.022,
+        transparent: true,
+        opacity: 0.58,
+      })
+      group.add(new three.Points(pointGeometry, pointMaterial))
+
+      const globeGeometry = new three.SphereGeometry(1.78, 42, 22)
+      const globeMaterial = new three.MeshBasicMaterial({
+        color: 0x2f6bff,
+        transparent: true,
+        opacity: 0.075,
+        wireframe: true,
+      })
+      group.add(new three.Mesh(globeGeometry, globeMaterial))
+
+      const routeMaterials = [
+        new three.LineBasicMaterial({ color: 0xff4d2e, transparent: true, opacity: 0.72 }),
+        new three.LineBasicMaterial({ color: 0x2f6bff, transparent: true, opacity: 0.58 }),
+        new three.LineBasicMaterial({ color: 0x16a36b, transparent: true, opacity: 0.58 }),
+        new three.LineBasicMaterial({ color: 0xffd45a, transparent: true, opacity: 0.68 }),
+      ]
+      const lineGeometries: Array<{ dispose: () => void }> = []
+      const routes = [
+        [41.3275, 19.8187, 40.7128, -74.006],
+        [41.3275, 19.8187, 51.5072, -0.1276],
+        [41.3275, 19.8187, 45.4642, 9.19],
+        [41.3275, 19.8187, 25.2048, 55.2708],
+        [41.3275, 19.8187, 1.3521, 103.8198],
+      ]
+
+      routes.forEach(([startLat, startLon, endLat, endLon], index) => {
+        const start = pointFromLatLon(three, startLat, startLon, 1.82)
+        const end = pointFromLatLon(three, endLat, endLon, 1.82)
+        const middle = start.clone().add(end).normalize().multiplyScalar(2.45 + index * 0.04)
+        const curve = new three.QuadraticBezierCurve3(start, middle, end)
+        const lineGeometry = new three.BufferGeometry().setFromPoints(curve.getPoints(72))
+        lineGeometries.push(lineGeometry)
+        group.add(new three.Line(lineGeometry, routeMaterials[index % routeMaterials.length]))
+      })
+
+      const nodeGeometry = new three.SphereGeometry(0.048, 16, 16)
+      const nodeMaterial = new three.MeshBasicMaterial({ color: 0xff4d2e })
+      ;[
+        [41.3275, 19.8187],
+        [40.7128, -74.006],
+        [51.5072, -0.1276],
+        [45.4642, 9.19],
+        [25.2048, 55.2708],
+        [1.3521, 103.8198],
+      ].forEach(([lat, lon]) => {
+        const node = new three.Mesh(nodeGeometry, nodeMaterial)
+        node.position.copy(pointFromLatLon(three, lat, lon, 1.88))
+        group.add(node)
+      })
+
+      const resize = () => {
+        const nextWidth = Math.max(mount.clientWidth, 320)
+        const nextHeight = Math.max(mount.clientHeight, 320)
+        camera.aspect = nextWidth / nextHeight
+        camera.updateProjectionMatrix()
+        renderer.setSize(nextWidth, nextHeight)
+      }
+
+      const onPointerMove = (event: PointerEvent) => {
+        const rect = mount.getBoundingClientRect()
+        pointer.x = ((event.clientX - rect.left) / rect.width - 0.5) * 0.34
+        pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 0.22
+      }
+
+      const animate = () => {
+        group.rotation.y += 0.0038
+        group.rotation.x += (pointer.y - group.rotation.x) * 0.035
+        group.rotation.z += (pointer.x - group.rotation.z) * 0.035
+        renderer.render(scene, camera)
+        if (!reducedMotion) {
+          animationFrame = window.requestAnimationFrame(animate)
+        }
+      }
+
+      const observer = new ResizeObserver(resize)
+      observer.observe(mount)
+      mount.addEventListener('pointermove', onPointerMove)
+      resize()
+      animate()
+
+      cleanup = () => {
+        window.cancelAnimationFrame(animationFrame)
+        observer.disconnect()
+        mount.removeEventListener('pointermove', onPointerMove)
+        renderer.dispose()
+        pointGeometry.dispose()
+        pointMaterial.dispose()
+        globeGeometry.dispose()
+        globeMaterial.dispose()
+        nodeGeometry.dispose()
+        nodeMaterial.dispose()
+        lineGeometries.forEach((geometry) => geometry.dispose())
+        routeMaterials.forEach((material) => material.dispose())
+        mount.replaceChildren()
+      }
+    })
+
+    return () => {
+      disposed = true
+      cleanup?.()
+    }
+  }, [])
+
+  return <div ref={mountRef} className="global-canvas" aria-hidden="true" />
+}
+
+function HeroNetwork() {
+  const heroImages = [
+    { title: 'Global delivery visual', image: generatedVisuals.globalHero },
+    { title: caseStudies[1].title, image: caseStudies[1].image },
+    { title: 'Product engineering visual', image: generatedVisuals.productEngineering },
+    { title: caseStudies[2].title, image: caseStudies[2].image },
+  ]
+
+  return (
+    <div className="hero-network" aria-label="Animated global project network">
+      <GlobalNetworkCanvas />
+      <div className="hero-image-stack" aria-hidden="true">
+        {heroImages.map((item, index) => (
+          <img
+            key={item.title}
+            src={item.image}
+            alt=""
+            style={{ '--delay': `${index * 3.6}s` } as CSSProperties}
+          />
+        ))}
+      </div>
+      <div className="signature-orbit" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+      <div className="network-route route-a">
+        <span>Tirana</span>
+        <strong>New York</strong>
+      </div>
+      <div className="network-route route-b">
+        <span>Design</span>
+        <strong>Cloud</strong>
+      </div>
+      <div className="network-stat">
+        <strong>5</strong>
+        <span>delivery zones</span>
+      </div>
+    </div>
+  )
+}
+
 function ClientMarquee() {
   return (
     <section className="client-marquee" aria-label="Client and project signals">
@@ -547,25 +773,114 @@ function ClientMarquee() {
   )
 }
 
+function GlobalReach() {
+  return (
+    <section className="section global-reach">
+      <div className="global-copy">
+        <p className="mono section-index">01 / BORDERLESS</p>
+        <h2>Software delivery mapped across borders.</h2>
+      </div>
+      <div className="global-map" aria-label="AtraX delivery network map">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Connected country network">
+          <path className="land-line" d="M12 34 C21 18 36 19 43 33 C51 49 69 29 83 43 C94 56 82 73 64 67 C49 62 38 78 24 65 C9 52 4 44 12 34Z" />
+          <path className="land-line land-line-soft" d="M39 24 C51 16 67 18 74 31 C82 46 73 56 60 53 C49 51 44 43 39 24Z" />
+          <path className="route-line route-line-red" d="M52 48 C43 28 30 28 22 43" />
+          <path className="route-line route-line-blue" d="M52 48 C49 34 47 31 46 34" />
+          <path className="route-line route-line-green" d="M52 48 C55 39 58 42 62 54" />
+          <path className="route-line route-line-yellow" d="M52 48 C68 48 73 58 78 67" />
+        </svg>
+        <img className="generated-map-asset" src={generatedVisuals.borderNetwork} alt="" aria-hidden="true" />
+        {globalHubs.map((hub) => (
+          <span
+            key={hub.city}
+            className="hub-point"
+            style={{ '--x': `${hub.x}%`, '--y': `${hub.y}%` } as CSSProperties}
+          >
+            <strong>{hub.city}</strong>
+            <em>{hub.region}</em>
+          </span>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function ProjectCinema() {
+  const cinemaItems = [
+    {
+      title: 'Global delivery layer',
+      label: 'Network operations',
+      image: generatedVisuals.globalHero,
+      alternate: generatedVisuals.borderNetwork,
+      proof: caseStudies[0].image,
+      accent: 'blue',
+    },
+    {
+      title: 'Engineering system',
+      label: 'Product engineering',
+      image: generatedVisuals.productEngineering,
+      alternate: caseStudies[1].image,
+      proof: caseStudies[1].image,
+      accent: 'green',
+    },
+    {
+      title: 'Security architecture',
+      label: 'Security infrastructure',
+      image: generatedVisuals.securitySystem,
+      alternate: generatedVisuals.borderNetwork,
+      proof: caseStudies[5].image,
+      accent: 'red',
+    },
+    {
+      title: 'AI operations layer',
+      label: 'AI operations',
+      image: generatedVisuals.aiOperations,
+      alternate: generatedVisuals.productEngineering,
+      proof: caseStudies[2].image,
+      accent: 'yellow',
+    },
+  ]
+
+  return (
+    <div className="cinema-grid">
+      {cinemaItems.map((item) => (
+        <article key={item.title} className={`cinema-card accent-${item.accent}`}>
+          <div className="cinema-media">
+            <img src={item.image} alt={`${item.title} project preview`} />
+            <img src={item.alternate} alt="" aria-hidden="true" />
+            <img className="cinema-proof" src={item.proof} alt="" aria-hidden="true" />
+          </div>
+          <div className="cinema-caption">
+            <span className="mono">{item.label}</span>
+            <h3>{item.title}</h3>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
 function MotionSystem() {
   return (
     <section className="section motion-system">
       <div className="motion-copy">
         <p className="mono section-index">01 / SYSTEM</p>
-        <h2>Less explanation. More visible delivery.</h2>
+        <h2>One moving layer from scope to launch.</h2>
       </div>
-      <div className="system-stage">
+      <div className="motion-atlas" aria-label="Animated delivery sequence">
+        <img className="atlas-image atlas-primary" src={generatedVisuals.borderNetwork} alt="" aria-hidden="true" />
+        <img className="atlas-image atlas-secondary" src={generatedVisuals.productEngineering} alt="" aria-hidden="true" />
+        <span className="motion-path path-red" />
+        <span className="motion-path path-blue" />
         {systemTiles.map((tile, index) => (
-          <article key={tile.title} className="system-tile">
-            <span className="mono">{tile.label}</span>
-            <h3>{tile.title}</h3>
-            <div className="system-lines">
-              {tile.lines.map((line) => (
-                <i key={line}>{line}</i>
-              ))}
-            </div>
-            <b>{String(index + 1).padStart(2, '0')}</b>
-          </article>
+          <span
+            key={tile.title}
+            className={`atlas-chip chip-${index + 1}`}
+            style={{ '--delay': `${index * 0.45}s` } as CSSProperties}
+          >
+            <strong>{tile.label}</strong>
+            <em>{tile.title}</em>
+          </span>
         ))}
       </div>
     </section>
@@ -586,71 +901,6 @@ function ProofStrip() {
         Full SDLC delivery from planning to launch.
       </div>
     </section>
-  )
-}
-
-function ProjectConsole() {
-  const logLines = [
-    'branch/mvp-checkout merged',
-    'qa smoke suite passed',
-    'preview url approved',
-    'production deploy armed',
-  ]
-
-  return (
-    <div className="console-stage" aria-label="Animated project console">
-      <div className="console-panel product-panel">
-        <div className="window-top">
-          <span />
-          <span />
-          <span />
-          <em>client-portal.tsx</em>
-        </div>
-        <div className="product-ui">
-          <div className="product-sidebar">
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="product-main">
-            <div className="chart-line">
-              <i />
-            </div>
-            <div className="metric-row">
-              <strong>Launch health</strong>
-              <b>96</b>
-            </div>
-            <div className="ui-bars">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="console-panel deploy-panel">
-        <div className="panel-title">
-          <CircleDot size={14} />
-          Production path
-        </div>
-        {['Commit', 'Preview', 'QA', 'Launch'].map((item) => (
-          <div key={item} className="deploy-row">
-            <CheckCircle2 size={15} />
-            <span>{item}</span>
-          </div>
-        ))}
-      </div>
-      <div className="console-panel log-panel">
-        <div className="panel-title">Build log</div>
-        {logLines.map((line) => (
-          <code key={line}>{line}</code>
-        ))}
-      </div>
-      <div className="console-panel note-panel">
-        <p>"Clear milestones, direct communication, and production-ready output."</p>
-        <span className="mono">CLIENT NOTE</span>
-      </div>
-    </div>
   )
 }
 
@@ -933,8 +1183,8 @@ function Testimonials() {
     <section className="section testimonials">
       <SectionHeading
         index="CLIENT SIGNAL"
-        title="Testimonials that move like a product carousel."
-        text="Real client signals, edited for clarity and paced like a visual proof reel."
+        title="Proof from delivery, not decoration."
+        text="Short client signals from shipped interfaces, systems, and release work."
       />
       <div className="testimonial-carousel" aria-roledescription="carousel" aria-label="Client testimonials">
         <div className="testimonial-viewport">
