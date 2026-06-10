@@ -1604,17 +1604,17 @@ main {
 }
 
 .testimonial-carousel {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
-  gap: 24px;
-  align-items: end;
-}
-
-.testimonial-viewport {
+  grid-template-columns: 1fr;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
+}
+
+.testimonial-viewport {
+  overflow: hidden;
 }
 
 .testimonial-track {
@@ -1694,14 +1694,13 @@ main {
 }
 
 .carousel-controls {
-  min-height: 162px;
-  padding: 18px;
+  min-height: 76px;
+  padding: 16px 22px;
   display: grid;
   grid-template-columns: 42px 1fr 42px;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-top: 1px solid var(--line);
   background: var(--surface);
 }
 
@@ -2046,7 +2045,6 @@ main {
   .build-film,
   .case-row,
   .motion-system,
-  .testimonial-carousel,
   .footer {
     grid-template-columns: 1fr;
   }
@@ -2085,14 +2083,6 @@ main {
 
   .system-tile {
     min-height: 260px;
-  }
-
-  .testimonial-carousel {
-    align-items: stretch;
-  }
-
-  .carousel-controls {
-    min-height: auto;
   }
 
   .process-card {

@@ -204,12 +204,6 @@ const testimonials = [
     role: 'Magic Candy Factory Ltd',
     metric: 'Systems checked',
   },
-  {
-    quote: 'Simply a great job.',
-    name: 'Pietro Montelatici',
-    role: 'Gruppo Toscano S.p.A',
-    metric: 'Trusted delivery',
-  },
 ]
 
 const systemTiles = [
