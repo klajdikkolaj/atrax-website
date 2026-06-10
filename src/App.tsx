@@ -21,8 +21,8 @@ import {
   UsersRound,
   type LucideIcon,
 } from 'lucide-react'
-import type { ReactNode } from 'react'
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { useEffect, useState, type ReactNode } from 'react'
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 
 const navItems = [
@@ -174,20 +174,63 @@ const testimonials = [
       'They delivered above and beyond in UX concepts, UI designs, frontend implementation, and backend data structure.',
     name: 'John Sherwin',
     role: 'Microsoft Corporation',
+    metric: 'UX + backend',
   },
   {
     quote:
       'Their ability to produce quality code, communicate, and actually understand the project scope is incredible.',
     name: 'Kyle Wyatt',
     role: 'PODKI Inc.',
+    metric: 'Quality code',
   },
   {
     quote:
       'They completed work early and made several improvements on our initial proposal.',
     name: 'Mike Spaulding',
     role: 'Microsoft / Affirma Consulting',
+    metric: 'Early delivery',
+  },
+  {
+    quote:
+      'True professionals. Clear objectives, clear time frames, and nimble solutions when the project needed them.',
+    name: 'Justin Doff',
+    role: 'Markenometry Inc.',
+    metric: 'Clear scope',
+  },
+  {
+    quote:
+      'They went above and beyond to develop new solutions and make sure our systems were working correctly.',
+    name: 'Reis Hill',
+    role: 'Magic Candy Factory Ltd',
+    metric: 'Systems checked',
+  },
+  {
+    quote: 'Simply a great job.',
+    name: 'Pietro Montelatici',
+    role: 'Gruppo Toscano S.p.A',
+    metric: 'Trusted delivery',
   },
 ]
+
+const systemTiles = [
+  {
+    title: 'Scope turns visible',
+    label: 'Discovery',
+    lines: ['Audit', 'Map', 'Prioritize'],
+  },
+  {
+    title: 'Design becomes testable',
+    label: 'Prototype',
+    lines: ['Flow', 'Screen', 'Review'],
+  },
+  {
+    title: 'Launch risk drops',
+    label: 'QA + Release',
+    lines: ['Tests', 'Preview', 'Deploy'],
+  },
+]
+
+const clientSignals = ['Microsoft', 'PODKI', 'Markenometry', 'Toyota', 'CDLAN', 'Dextrio']
 
 function Header() {
   return (
@@ -227,10 +270,12 @@ function Footer() {
 }
 
 function Layout() {
+  const location = useLocation()
+
   return (
     <div className="app-shell">
       <Header />
-      <main>
+      <main key={location.pathname} className="route-frame">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/work" element={<WorkPage />} />
@@ -251,8 +296,7 @@ function HomePage() {
         <div className="hero-copy">
           <h1>Software teams for products that need to ship cleanly.</h1>
           <p>
-            AtraX partners with startups and product teams to design, build, test,
-            and launch web and mobile software without the template-agency noise.
+            AtraX turns product ideas into shipped web, mobile, and cloud systems.
           </p>
           <div className="hero-actions">
             <NavLink to="/contact" className="button button-dark">
@@ -269,31 +313,15 @@ function HomePage() {
       </section>
 
       <ProofStrip />
+      <ClientMarquee />
 
-      <section className="section page-grid split-section">
-        <div>
-          <p className="mono section-index">01 / POSITION</p>
-          <h2>Technology plus business ideas, rebuilt for serious buyers.</h2>
-        </div>
-        <div className="copy-stack">
-          <p>
-            The existing Atrax story is strong: an innovative software company
-            supporting the full SDLC from planning to implementation, testing,
-            and delivery. This site makes that promise easier to trust.
-          </p>
-          <p>
-            It focuses on evidence: selected systems, engineering services,
-            delivery rhythm, and the kind of senior pod clients can work with
-            directly.
-          </p>
-        </div>
-      </section>
+      <MotionSystem />
 
       <section className="section">
         <SectionHeading
           index="02 / WORK"
           title="Selected work, shown as systems in motion."
-          text="A few real Atrax portfolio anchors, reframed as product systems with visible delivery context."
+          text="Real portfolio anchors, reframed as moving product systems."
         />
         <div className="case-rail">
           {caseStudies.slice(0, 3).map((item) => (
@@ -309,12 +337,14 @@ function HomePage() {
           <p className="mono section-index">04 / SERVICES</p>
           <h2>Senior pods for the product work between idea and production.</h2>
         </div>
-        <div className="service-list compact">
+        <div className="service-list">
           {services.slice(0, 4).map((service) => (
             <ServiceRow key={service.title} service={service} />
           ))}
         </div>
       </section>
+
+      <Testimonials />
     </>
   )
 }
@@ -325,7 +355,7 @@ function WorkPage() {
       <PageHero
         label="Work"
         title="Portfolio work that reads like operating systems, not thumbnails."
-        text="Atrax has shipped across cybersecurity, eGovernment, commerce, SaaS, AI, and operations. This page presents that breadth with motion, context, and sharper proof."
+        text="Cybersecurity, eGovernment, commerce, SaaS, AI, and operations - presented with motion, context, and proof."
         visual={<WorkGridVisual />}
       />
       <ProjectReels />
@@ -353,7 +383,7 @@ function ServicesPage() {
       <PageHero
         label="Services"
         title="From MVP shape to production reliability."
-        text="AtraX supports the full software development life cycle with frontend, backend, mobile, cloud, QA, project management, dedicated teams, and staff augmentation."
+        text="Strategy, product design, engineering, QA, cloud, and dedicated teams in one delivery loop."
         visual={<ServiceOrbit />}
       />
       <section className="section service-grid">
@@ -365,7 +395,7 @@ function ServicesPage() {
         <SectionHeading
           index="INDUSTRIES"
           title="Teams that can adapt across regulated, operational, and growth products."
-          text="The old site lists broad industry experience; this version makes the range scannable without turning it into filler."
+          text="A fast scan of the domains where Atrax already has useful product context."
         />
         <div className="industry-grid">
           {industries.map((industry, index) => (
@@ -387,7 +417,7 @@ function ProcessPage() {
       <PageHero
         label="Process"
         title="A delivery rhythm designed to reduce ambiguity."
-        text="Good software work is not just talent. It is a sequence of decisions, visible checkpoints, and hardening before launch."
+        text="Decisions, visible checkpoints, and hardening before launch pressure arrives."
         visual={<ProcessBoard />}
       />
       <section className="section">
@@ -426,9 +456,8 @@ function ContactPage() {
           <p className="mono section-index">CONTACT</p>
           <h1>Start with the product problem. AtraX can shape the build.</h1>
           <p>
-            Use this presentation page as a high-confidence project intake
-            surface. The form is intentionally non-functional for now, but the
-            content and experience are ready for a real backend when needed.
+            A concise intake surface for MVPs, platforms, AI workflows, mobile
+            apps, and dedicated engineering pods.
           </p>
           <div className="contact-lines">
             <span>
@@ -507,8 +536,45 @@ function SectionHeading({
     <div className="section-heading">
       <p className="mono section-index">{index}</p>
       <h2>{title}</h2>
-      <p>{text}</p>
+      {text ? <p>{text}</p> : null}
     </div>
+  )
+}
+
+function ClientMarquee() {
+  return (
+    <section className="client-marquee" aria-label="Client and project signals">
+      <div className="marquee-track">
+        {[...clientSignals, ...clientSignals].map((client, index) => (
+          <span key={`${client}-${index}`}>{client}</span>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function MotionSystem() {
+  return (
+    <section className="section motion-system">
+      <div className="motion-copy">
+        <p className="mono section-index">01 / SYSTEM</p>
+        <h2>Less explanation. More visible delivery.</h2>
+      </div>
+      <div className="system-stage">
+        {systemTiles.map((tile, index) => (
+          <article key={tile.title} className="system-tile">
+            <span className="mono">{tile.label}</span>
+            <h3>{tile.title}</h3>
+            <div className="system-lines">
+              {tile.lines.map((line) => (
+                <i key={line}>{line}</i>
+              ))}
+            </div>
+            <b>{String(index + 1).padStart(2, '0')}</b>
+          </article>
+        ))}
+      </div>
+    </section>
   )
 }
 
@@ -856,23 +922,64 @@ function Signal({
 }
 
 function Testimonials() {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrent((value) => (value + 1) % testimonials.length)
+    }, 5200)
+
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const previous = () => setCurrent((value) => (value - 1 + testimonials.length) % testimonials.length)
+  const next = () => setCurrent((value) => (value + 1) % testimonials.length)
+
   return (
     <section className="section testimonials">
       <SectionHeading
         index="CLIENT SIGNAL"
-        title="Proof from buyers who cared about scope, quality, and communication."
-        text="Existing Atrax testimonials are edited into a more focused proof surface."
+        title="Testimonials that move like a product carousel."
+        text="Real client signals, edited for clarity and paced like a visual proof reel."
       />
-      <div className="testimonial-grid">
-        {testimonials.map((item) => (
-          <article key={item.name} className="testimonial">
-            <p>"{item.quote}"</p>
-            <div>
-              <strong>{item.name}</strong>
-              <span>{item.role}</span>
-            </div>
-          </article>
-        ))}
+      <div className="testimonial-carousel" aria-roledescription="carousel" aria-label="Client testimonials">
+        <div className="testimonial-viewport">
+          <div
+            className="testimonial-track"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {testimonials.map((item) => (
+              <article key={item.name} className="testimonial-slide">
+                <span className="testimonial-metric">{item.metric}</span>
+                <p>"{item.quote}"</p>
+                <div>
+                  <strong>{item.name}</strong>
+                  <span>{item.role}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div className="carousel-controls">
+          <button type="button" onClick={previous} aria-label="Previous testimonial">
+            <ChevronRight size={18} />
+          </button>
+          <div className="carousel-dots" aria-label="Testimonial position">
+            {testimonials.map((item, index) => (
+              <button
+                key={item.name}
+                type="button"
+                className={index === current ? 'active' : ''}
+                onClick={() => setCurrent(index)}
+                aria-label={`Show testimonial ${index + 1}`}
+                aria-current={index === current}
+              />
+            ))}
+          </div>
+          <button type="button" onClick={next} aria-label="Next testimonial">
+            <ChevronRight size={18} />
+          </button>
+        </div>
       </div>
     </section>
   )
