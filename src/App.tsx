@@ -178,6 +178,7 @@ const testimonials = [
     name: 'John Sherwin',
     role: 'Enterprise product stakeholder',
     metric: 'UX + backend',
+    photo: '/generated/atrax-person-05.png',
   },
   {
     quote:
@@ -185,6 +186,7 @@ const testimonials = [
     name: 'Kyle Wyatt',
     role: 'Product founder',
     metric: 'Quality code',
+    photo: '/generated/atrax-person-07.png',
   },
   {
     quote:
@@ -192,6 +194,7 @@ const testimonials = [
     name: 'Mike Spaulding',
     role: 'Consulting delivery lead',
     metric: 'Early delivery',
+    photo: '/generated/atrax-person-09.png',
   },
   {
     quote:
@@ -199,6 +202,7 @@ const testimonials = [
     name: 'Justin Doff',
     role: 'Growth systems founder',
     metric: 'Clear scope',
+    photo: '/generated/atrax-person-08.png',
   },
   {
     quote:
@@ -206,6 +210,7 @@ const testimonials = [
     name: 'Reis Hill',
     role: 'Operations platform owner',
     metric: 'Systems checked',
+    photo: '/generated/atrax-person-06.png',
   },
 ]
 
@@ -241,21 +246,29 @@ const teamRoles = [
     title: 'Product leads',
     text: 'Shape scope, milestones, stakeholder rhythm, and the shortest path to a useful release.',
     label: '01',
+    signal: 'Strategy / delivery ownership',
+    photo: '/generated/atrax-person-01.png',
   },
   {
     title: 'UX and UI designers',
     text: 'Turn workflows into screens that can be reviewed, tested, and handed to engineering without drift.',
     label: '02',
+    signal: 'Flows / interface systems',
+    photo: '/generated/atrax-person-02.png',
   },
   {
     title: 'Full-stack engineers',
     text: 'Build web, mobile, API, cloud, and data layers with launch pressure in mind from day one.',
     label: '03',
+    signal: 'Frontend / backend / cloud',
+    photo: '/generated/atrax-person-03.png',
   },
   {
     title: 'QA and release',
     text: 'Automate checks, harden environments, and keep release risk visible before production.',
     label: '04',
+    signal: 'Automation / launch control',
+    photo: '/generated/atrax-person-04.png',
   },
 ]
 
@@ -491,7 +504,15 @@ function TeamPage() {
         <div className="team-role-grid">
           {teamRoles.map((role) => (
             <article key={role.title} className="team-role-card">
-              <span className="mono">{role.label}</span>
+              <div className="team-role-head">
+                <div>
+                  <span className="mono">{role.label}</span>
+                  <span className="team-role-signal">{role.signal}</span>
+                </div>
+                <div className="team-role-photo">
+                  <img src={role.photo} alt="" aria-hidden="true" />
+                </div>
+              </div>
               <h3>{role.title}</h3>
               <p>{role.text}</p>
             </article>
@@ -1349,6 +1370,7 @@ function Testimonials() {
           >
             {testimonials.map((item) => (
               <article key={item.name} className="testimonial-slide">
+                <img className="testimonial-avatar" src={item.photo} alt="" aria-hidden="true" />
                 <span className="testimonial-metric">{item.metric}</span>
                 <p>"{item.quote}"</p>
                 <div>

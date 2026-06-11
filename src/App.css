@@ -2502,16 +2502,79 @@ main {
 
 .team-role-card {
   position: relative;
-  min-height: 270px;
-  padding: 32px;
+  min-height: 410px;
+  padding: 34px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #fff;
+  background:
+    linear-gradient(145deg, rgba(17, 19, 21, 0.018), transparent 36%),
+    radial-gradient(circle at 88% 18%, rgba(47, 107, 255, 0.08), transparent 32%),
+    #fff;
   transition:
     transform 220ms ease,
     border-color 220ms ease,
     box-shadow 220ms ease;
+}
+
+.team-role-head {
+  position: relative;
+  z-index: 1;
+  min-height: 204px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.team-role-head > div:first-child {
+  min-width: 128px;
+}
+
+.team-role-signal {
+  display: block;
+  max-width: 148px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.team-role-photo {
+  position: relative;
+  width: 158px;
+  height: 204px;
+  overflow: hidden;
+  border: 1px solid rgba(221, 225, 230, 0.92);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(244, 246, 248, 0.92)),
+    var(--surface);
+  box-shadow: 0 22px 58px rgba(17, 19, 21, 0.13);
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.team-role-photo::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), transparent);
+  opacity: 0.82;
+}
+
+.team-role-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.08) brightness(1.03);
+  transform: scale(1.04);
 }
 
 .team-role-card::after {
@@ -2531,14 +2594,23 @@ main {
   box-shadow: var(--shadow);
 }
 
+.team-role-card:hover .team-role-photo {
+  transform: translateY(-4px) scale(1.035);
+  box-shadow: 0 24px 60px rgba(17, 19, 21, 0.16);
+}
+
 .team-role-card h3 {
-  margin: 76px 0 14px;
+  position: relative;
+  z-index: 1;
+  margin: 28px 0 14px;
   color: var(--ink);
   font-size: clamp(24px, 2.5vw, 34px);
   line-height: 1.02;
 }
 
 .team-role-card p {
+  position: relative;
+  z-index: 1;
   margin: 0;
   color: var(--muted);
   font-size: 15px;
@@ -2735,7 +2807,12 @@ main {
 }
 
 .testimonials {
+  padding-top: clamp(54px, 7vw, 90px);
   border-top: 1px solid var(--line);
+}
+
+.testimonials .section-heading {
+  margin-bottom: 28px;
 }
 
 .testimonial-carousel {
@@ -2761,8 +2838,8 @@ main {
   position: relative;
   isolation: isolate;
   min-width: 100%;
-  min-height: 340px;
-  padding: clamp(34px, 6vw, 70px);
+  min-height: 286px;
+  padding: clamp(28px, 4.8vw, 56px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2777,17 +2854,34 @@ main {
   content: "";
   position: absolute;
   z-index: 0;
-  right: clamp(30px, 6vw, 72px);
-  top: clamp(30px, 6vw, 72px);
-  width: 82px;
-  height: 82px;
+  right: clamp(22px, 5vw, 58px);
+  top: clamp(22px, 5vw, 58px);
+  width: 136px;
+  height: 136px;
   border-radius: 50%;
+  border: 1px solid var(--line);
   background:
-    radial-gradient(circle, var(--red) 0 18%, transparent 19%),
-    conic-gradient(from 90deg, var(--blue), var(--green), var(--yellow), var(--red), var(--blue));
-  opacity: 0.9;
-  animation: orbitRotate 12s linear infinite;
+    linear-gradient(135deg, #fff, var(--surface)),
+    #fff;
+  box-shadow: 0 22px 70px rgba(17, 19, 21, 0.08);
+  opacity: 1;
   pointer-events: none;
+}
+
+.testimonial-avatar {
+  position: absolute;
+  z-index: 2;
+  right: clamp(41px, 6.2vw, 79px);
+  top: clamp(41px, 6.2vw, 79px);
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border: 1px solid rgba(221, 225, 230, 0.92);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 18px 50px rgba(17, 19, 21, 0.12);
+  filter: grayscale(1) contrast(1.06) brightness(1.03);
+  animation: avatarFloat 5.8s ease-in-out infinite;
 }
 
 .testimonial-metric {
@@ -2808,7 +2902,7 @@ main {
   max-width: 760px;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(30px, 4.2vw, 50px);
+  font-size: clamp(30px, 3.8vw, 46px);
   line-height: 1.05;
   letter-spacing: 0;
 }
@@ -3066,6 +3160,17 @@ main {
 @keyframes orbitRotate {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes avatarFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
   }
 }
 
@@ -3465,7 +3570,19 @@ main {
   }
 
   .site-header nav {
-    justify-content: flex-start;
+    width: 100%;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 4px;
+    overflow-x: auto;
+  }
+
+  .site-header nav a {
+    flex: 1 1 0;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 4px;
+    font-size: 12px;
   }
 
   .section {
@@ -3729,12 +3846,27 @@ main {
   }
 
   .team-role-card {
-    min-height: 230px;
+    min-height: 350px;
     padding: 26px;
   }
 
+  .team-role-head {
+    min-height: 152px;
+  }
+
+  .team-role-signal {
+    max-width: 116px;
+    margin-top: 12px;
+    font-size: 10px;
+  }
+
+  .team-role-photo {
+    width: 116px;
+    height: 152px;
+  }
+
   .team-role-card h3 {
-    margin-top: 54px;
+    margin-top: 24px;
   }
 
   .team-cinema-stage img:first-child {
@@ -3948,11 +4080,17 @@ main {
   }
 
   .testimonial-slide::after {
-    right: 22px;
-    top: 22px;
-    width: 46px;
-    height: 46px;
-    opacity: 0.58;
+    right: 16px;
+    top: 18px;
+    width: 74px;
+    height: 74px;
+  }
+
+  .testimonial-avatar {
+    right: 26px;
+    top: 28px;
+    width: 52px;
+    height: 52px;
   }
 
   .testimonial-slide p {
