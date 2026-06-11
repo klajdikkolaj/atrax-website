@@ -307,8 +307,7 @@ function Header() {
   return (
     <header className="site-header">
       <NavLink to="/" className="brand" aria-label="AtraX home">
-        <span className="brand-mark">AX</span>
-        <span>AtraX</span>
+        <img className="brand-logo" src="/atrax-logo.png" alt="AtraX" />
       </NavLink>
       <nav aria-label="Primary navigation">
         {navItems.map((item) => (
